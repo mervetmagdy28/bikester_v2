@@ -17,14 +17,17 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
-  // @override
-  // void initState() async{
-  //   if (FirebaseAuth.instance.currentUser != null) {
-  //    await Get.to(()=>HomePage());
-  //   }
-  //   super.initState();
-  // }
+  @override
+  void initState(){
+    func();
+    super.initState();
+  }
 
+  func()async{
+    if (FirebaseAuth.instance.currentUser != null) {
+      await Get.to(()=>HomePage());
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
