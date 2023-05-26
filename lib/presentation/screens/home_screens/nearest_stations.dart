@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:get/get_core/src/get_main.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../data/models/station_model.dart';
@@ -37,30 +36,30 @@ class _NearestStationState extends State<NearestStation> {
     // TODO: implement initState
     super.initState();
     getNearestStation();
-    setState(() {
-
-    });
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GoogleMap(
-        polylines: polylinePoints,
-        initialCameraPosition: initialCameraPosition,
-        markers: markers,
-        zoomControlsEnabled: false,
-        mapType: MapType.normal,
-        onMapCreated: (GoogleMapController controller) {
-          googleMapController = controller;
-        },
+      body: Stack(
+        children: [
+          GoogleMap(
+            polylines: polylinePoints,
+            initialCameraPosition: initialCameraPosition,
+            markers: markers,
+            zoomControlsEnabled: false,
+            mapType: MapType.normal,
+            onMapCreated: (GoogleMapController controller) {
+              googleMapController = controller;
+            },
+          ),
+          ElevatedButton(onPressed: (){
+            Get.to(() => const StartTrip());
+          }, child: Text("njkn"))
+        ],
       ),
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            getDistance();
-            String url='https://www.google.com/maps/dir/?api=1&origin=${markers.elementAt(0).position.latitude.toString()},${markers.elementAt(0).position.longitude.toString()}&destination=${markers.elementAt(1).position.latitude.toString()},${markers.elementAt(0).position.longitude.toString()}&travelmode=driving&dir_action=navigate';
-            _launchURL(url);
-
-
+            getDistance(context);
           },
           backgroundColor: Colors.orange,
           label: const Text("show on google map")),
@@ -81,7 +80,7 @@ class _NearestStationState extends State<NearestStation> {
     });
   }
 
-  getDistance ()async{
+  getDistance (BuildContext context){
     var stationList = stationController.allStations.value;
     getNearestStation();
 
@@ -93,7 +92,10 @@ class _NearestStationState extends State<NearestStation> {
     );
 
     if (distance > 50) {
-      Get.to(() => const StartTrip());
+     Get.to(() => const StartTrip());
+    }else{
+      String url='https://www.google.com/maps/dir/?api=1&origin=${markers.elementAt(0).position.latitude.toString()},${markers.elementAt(0).position.longitude.toString()}&destination=${markers.elementAt(1).position.latitude.toString()},${markers.elementAt(1).position.longitude.toString()}&travelmode=driving&dir_action=navigate';
+      _launchURL(url);
     }
   }
   void getNearestStation() async {
