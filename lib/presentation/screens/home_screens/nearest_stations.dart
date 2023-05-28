@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:bikesterr/presentation/screens/home_screens/start_trip.dart';
+import 'package:bikesterr/presentation/screens/home_screens/scan_qr.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -35,27 +35,21 @@ class _NearestStationState extends State<NearestStation> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    getPosition();
     getNearestStation();
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          GoogleMap(
-            polylines: polylinePoints,
-            initialCameraPosition: initialCameraPosition,
-            markers: markers,
-            zoomControlsEnabled: false,
-            mapType: MapType.normal,
-            onMapCreated: (GoogleMapController controller) {
-              googleMapController = controller;
-            },
-          ),
-          ElevatedButton(onPressed: (){
-            Get.to(() => const StartTrip());
-          }, child: Text("njkn"))
-        ],
+      body: GoogleMap(
+        polylines: polylinePoints,
+        initialCameraPosition: initialCameraPosition,
+        markers: markers,
+        zoomControlsEnabled: false,
+        mapType: MapType.normal,
+        onMapCreated: (GoogleMapController controller) {
+          googleMapController = controller;
+        },
       ),
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
@@ -81,9 +75,12 @@ class _NearestStationState extends State<NearestStation> {
   }
 
   getDistance (BuildContext context){
-    var stationList = stationController.allStations.value;
     getNearestStation();
+      String url='https://www.google.com/maps/dir/?api=1&origin=${markers.elementAt(0).position.latitude.toString()},${markers.elementAt(0).position.longitude.toString()}&destination=${markers.elementAt(1).position.latitude.toString()},${markers.elementAt(1).position.longitude.toString()}&travelmode=driving&dir_action=navigate';
+      _launchURL(url);
+  }
 
+  scanQR(){
     double distance = Geolocator.distanceBetween(
       position.latitude,
       position.longitude,
@@ -91,11 +88,8 @@ class _NearestStationState extends State<NearestStation> {
       double.parse(nearestStation!.long!),
     );
 
-    if (distance > 50) {
-     Get.to(() => const StartTrip());
-    }else{
-      String url='https://www.google.com/maps/dir/?api=1&origin=${markers.elementAt(0).position.latitude.toString()},${markers.elementAt(0).position.longitude.toString()}&destination=${markers.elementAt(1).position.latitude.toString()},${markers.elementAt(1).position.longitude.toString()}&travelmode=driving&dir_action=navigate';
-      _launchURL(url);
+    if (distance>50) {
+      Get.offAll( ScanQr(stationModel: nearestStation!,));
     }
   }
   void getNearestStation() async {
@@ -126,6 +120,7 @@ class _NearestStationState extends State<NearestStation> {
       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
     ));
     drawPolyLine();
+    scanQR();
     setState(() {});
   }
 

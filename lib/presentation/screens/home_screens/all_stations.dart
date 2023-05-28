@@ -6,6 +6,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/get.dart';
 
+import '../../../constants.dart';
+
 class AllStations extends StatelessWidget {
   AllStations({super.key});
 
@@ -15,12 +17,12 @@ class AllStations extends StatelessWidget {
   //     long: "29.31254",
   //     availableBikes: "6");
 
-  var stationController = Get.put(StationsController());
+
 
   @override
   Widget build(BuildContext context) {
     var stationList = stationController.allStations.value;
-
+print(stationList);
     return Center(
       child: ListView.builder(
         itemBuilder: (context, index) {
