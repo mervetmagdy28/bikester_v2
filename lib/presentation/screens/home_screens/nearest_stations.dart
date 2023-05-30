@@ -53,7 +53,7 @@ class _NearestStationState extends State<NearestStation> {
       ),
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            getDistance(context);
+            getDistanceInMap(context);
           },
           backgroundColor: Colors.orange,
           label: const Text("show on google map")),
@@ -74,7 +74,7 @@ class _NearestStationState extends State<NearestStation> {
     });
   }
 
-  getDistance (BuildContext context){
+  getDistanceInMap (BuildContext context){
     getNearestStation();
       String url='https://www.google.com/maps/dir/?api=1&origin=${markers.elementAt(0).position.latitude.toString()},${markers.elementAt(0).position.longitude.toString()}&destination=${markers.elementAt(1).position.latitude.toString()},${markers.elementAt(1).position.longitude.toString()}&travelmode=driving&dir_action=navigate';
       _launchURL(url);

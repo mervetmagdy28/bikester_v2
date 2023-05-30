@@ -8,6 +8,10 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
+import '../../../constants.dart';
+import '../../../data/models/trip_info.dart';
+import 'end_trip.dart';
+
 
 class ScanQr extends StatelessWidget {
   const ScanQr({Key? key, required this.stationModel}) : super(key: key);
@@ -118,12 +122,32 @@ class _QRViewExampleState extends State<QRViewExample> {
       ),
     );
   }
-  scannedQr()async{
-    if(result?.code!=null)
-   {
-     await controller?.pauseCamera();
-     Get.offAll(()=> StartTrip(stationModel: widget.stationModel,));
-   }
+  scannedQr()async {
+
+    if (trips.isEmpty){
+      if (result?.code != null) {
+        await controller?.pauseCamera();
+        Get.offAll(() =>  StartTrip(stationModel: widget.stationModel,));
+      }
+    }
+    for(TripInfo tripInfo in trips){
+      print('$tripInfo llllllllllllllllllllllllllllllllllllllllllllllllllllllllll');
+          if(tripInfo.flag! ==false){
+            if (result?.code != null) {
+              await controller?.pauseCamera();
+              Get.offAll(() =>  EndTrip(stationModel: widget.stationModel,));
+            }
+          }
+        }
+    for(TripInfo tripInfo in trips){
+      print('$tripInfo llllllllllllllllllllllllllllllllllllllllllllllllllllllllll');
+      if(tripInfo.flag! ==true){
+        if (result?.code != null) {
+          await controller?.pauseCamera();
+          Get.offAll(() =>  StartTrip(stationModel: widget.stationModel,));
+        }
+      }
+    }
   }
 
   Widget _buildQrView(BuildContext context) {

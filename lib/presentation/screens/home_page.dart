@@ -1,8 +1,12 @@
-import 'package:bikesterr/domain/controllers/stations_controller.dart';
+import 'package:bikesterr/data/models/station_model.dart';
+import 'package:bikesterr/data/models/trip_info.dart';
+import 'package:bikesterr/domain/controllers/trip_controller.dart';
 import 'package:bikesterr/presentation/components/appbar.dart';
 import 'package:bikesterr/presentation/components/drawer.dart';
+import 'package:bikesterr/presentation/screens/home_screens/trip_running.dart';
 import 'package:flutter/material.dart';
 
+import '../../constants.dart';
 import 'home_screens/all_stations.dart';
 import 'home_screens/nearest_stations.dart';
 import 'home_screens/profile.dart';
@@ -18,13 +22,23 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var screens = [ NearestStation(), AllStations(), Profile()];
   int index = 0;
-
-  var stationController = Get.put(StationsController());
   @override
   void initState() {
+    tripController.getTrips();
     // TODO: implement initState
+   for(TripInfo tripInfo in trips){
+  if(tripInfo.flag! ==false){
+    for (StationModel stationModel in stations){
+      if (stationModel.stationName==tripInfo.endStationName){
+        Get.to( TripRunning(destinationLoc: stationModel,));
+      }
+    }
+  }else{
 
+  }
+}
     stationController.getStations();
+
     super.initState();
   }
 

@@ -21,15 +21,13 @@ class AllStations extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var stationList = stationController.allStations.value;
-print(stationList);
     return Center(
       child: ListView.builder(
         itemBuilder: (context, index) {
           return StationListTile(
               stationModel: stationController.allStations.value[index]);
         },
-        itemCount: stationList.length,
+        itemCount: stations.length,
       ),
     );
   }

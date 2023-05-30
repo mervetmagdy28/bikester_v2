@@ -15,7 +15,7 @@ class StationListTile extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          padding: EdgeInsets.all(20),
+          padding:const EdgeInsets.all(20),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.white),
             borderRadius: BorderRadius.circular(16),
@@ -27,7 +27,7 @@ class StationListTile extends StatelessWidget {
                 leading: const Icon(Icons.ev_station, color: Colors.black),
                 title: Text(
                   " ${stationModel.stationName}",
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
                   ),
@@ -39,10 +39,10 @@ class StationListTile extends StatelessWidget {
                   size: 40,
                 ),
                 onTap: () {
-                  Get.to(() => PickedStation());
+                  Get.to(() => const PickedStation());
                 },
                 contentPadding:
-                    EdgeInsets.symmetric(horizontal: 5, vertical: 2.5),
+                    const EdgeInsets.symmetric(horizontal: 5, vertical: 2.5),
                 dense: true,
                 enabled: true,
                 //selected: true,
