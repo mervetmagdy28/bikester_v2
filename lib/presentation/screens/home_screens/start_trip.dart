@@ -20,7 +20,7 @@ class _StartTripState extends State<StartTrip> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    addRide();
+    //addRide();
   }
   @override
   Widget build(BuildContext context) {
@@ -60,20 +60,20 @@ class _StartTripState extends State<StartTrip> {
     );
   }
 
-  addRide(){
-    trip.add({
-      'flag': false,
-      'begin station Name': widget.stationModel.stationName,
-      'begin trip': getCurrentTime(),
-      'end station Name':null.toString(),
-      'end trip':null.toString(),
-    });
-  }
-
-  String getCurrentTime(){
-    String datetime = DateTime.now().toString();
-    datetime= DateFormat("MMMM, dd, yyyy").format(DateTime.now());
-    String hourDate = DateFormat("hh:mm:ss a").format(DateTime.now());
-    return '$hourDate  $datetime';
-  }
+  // addRide(){
+  //   trip.add({
+  //     'flag': false,
+  //     'begin station Name': widget.stationModel.stationName,
+  //     'begin trip': getCurrentTime(),
+  //     'end station Name':null.toString(),
+  //     'end trip':null.toString(),
+  //   });
+  // }
+  //
+  // String getCurrentTime(){
+  //   String datetime = DateTime.now().toString();
+  //   datetime= DateFormat("MMMM, dd, yyyy").format(DateTime.now());
+  //   String hourDate = DateFormat("hh:mm:ss a").format(DateTime.now());
+  //   return '$hourDate  $datetime';
+  // }
 }

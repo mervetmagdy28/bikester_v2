@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../constants.dart';
 import '../components/custom_elevated_button.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -25,6 +26,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   func()async{
     if (FirebaseAuth.instance.currentUser != null) {
+      await userDataController.fetchData();
       await Get.to(()=>HomePage());
     }
   }

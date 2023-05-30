@@ -5,14 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../constants.dart';
 import '../../presentation/screens/login.dart';
 
 class AuthController extends RxController {
   // data , fields
   // final FirebaseAuthentication _firebaseAuthentication =
   //     FirebaseAuthentication();
-  final auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+             // final FirebaseFirestore firestore = FirebaseFirestore.instance;
 //   final _recaptchaVerifier = RecaptchaVerifier(
 //   container: 'recaptcha',
 //   size: RecaptchaVerifierSize.compact,
@@ -82,7 +83,7 @@ class AuthController extends RxController {
     required String userID,
     required String email,
   }) async {
-    await _firestore.collection("users").doc(userID).set({
+    await firestore.collection("users").doc(userID).set({
       "bloodGroup": bloodGroup,
       "dateofBirth": dateOfBirth,
       "emergencyNumber": emergencyNumber,

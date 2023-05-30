@@ -31,7 +31,7 @@ class _DestinationTripState extends State<DestinationTrip> {
   void initState() {
     // TODO: implement initState
     super.initState();
-stationController.getStations();
+    stationController.getStations();
     print(stations.length);
     for(StationModel stationModel in stations){
       stationNames.add(stationModel.stationName??'station name');
@@ -100,7 +100,7 @@ stationController.getStations();
       {
         if (stationModel.stationName==stationName){
           destinationLoc=stationModel;
-          var querySnapshot=await trip.get();
+          var querySnapshot=await rides.get();
           querySnapshot.docs.forEach((doc) {
             id=doc.id;
           });
@@ -108,7 +108,7 @@ stationController.getStations();
       }
     String url='https://www.google.com/maps/dir/?api=1&origin=${position.latitude.toString()},${position.longitude.toString()}&destination=${destinationLoc.lat.toString()},${destinationLoc.long.toString()}&travelmode=driving&dir_action=navigate';
     _launchURL(url);
-    trip.doc(id).update({
+    rides.doc(id).update({
       'end station Name':destinationLoc.stationName
     });
   }

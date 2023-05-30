@@ -2,10 +2,12 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:bikesterr/data/models/station_model.dart';
 import 'package:bikesterr/presentation/screens/home_screens/start_trip.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../../../constants.dart';
@@ -40,23 +42,23 @@ class QRViewExample extends StatefulWidget {
 
 class _QRViewExampleState extends State<QRViewExample> {
   Barcode? result;
-  QRViewController? controller;
+  QRViewController? qrController;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
   @override
   void reassemble() {
     super.reassemble();
     if (Platform.isAndroid) {
-      controller!.pauseCamera();
+      qrController!.pauseCamera();
     }
-    controller!.resumeCamera();
+    qrController!.resumeCamera();
   }
 
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: scannedQr(),
+      future: scanQr(),
       builder:(context,snapshot)=> Scaffold(
         body: Column(
           children: <Widget>[
@@ -79,11 +81,11 @@ class _QRViewExampleState extends State<QRViewExample> {
                               backgroundColor: MaterialStatePropertyAll(Colors.orange)
                             ),
                               onPressed: () async {
-                                await controller?.toggleFlash();
+                                await qrController?.toggleFlash();
                                 setState(() {});
                               },
                               child: FutureBuilder(
-                                future: controller?.getFlashStatus(),
+                                future: qrController?.getFlashStatus(),
                                 builder: (context, snapshot) {
                                   return Text('Flash: ${snapshot.data}');
                                 },
@@ -96,11 +98,11 @@ class _QRViewExampleState extends State<QRViewExample> {
                                   backgroundColor: MaterialStatePropertyAll(Colors.orange)
                               ),
                               onPressed: () async {
-                                await controller?.flipCamera();
+                                await qrController?.flipCamera();
                                 setState(() {});
                               },
                               child: FutureBuilder(
-                                future: controller?.getCameraInfo(),
+                                future: qrController?.getCameraInfo(),
                                 builder: (context, snapshot) {
                                   if (snapshot.data != null) {
                                     return Text(
@@ -122,34 +124,73 @@ class _QRViewExampleState extends State<QRViewExample> {
       ),
     );
   }
-  scannedQr()async {
+  // scannedQr()async {
+  //
+  //   if (trips.isEmpty){
+  //     if (result?.code != null) {
+  //       await controller?.pauseCamera();
+  //       Get.offAll(() =>  StartTrip(stationModel: widget.stationModel,));
+  //     }
+  //   }
+  //   for(TripInfo tripInfo in trips){
+  //     print('$tripInfo llllllllllllllllllllllllllllllllllllllllllllllllllllllllll');
+  //         if(tripInfo.flag! ==false){
+  //           if (result?.code != null) {
+  //             await controller?.pauseCamera();
+  //             Get.offAll(() =>  EndTrip(stationModel: widget.stationModel,));
+  //           }
+  //         }
+  //       }
+  //   for(TripInfo tripInfo in trips){
+  //     print('$tripInfo llllllllllllllllllllllllllllllllllllllllllllllllllllllllll');
+  //     if(tripInfo.flag! ==true){
+  //       if (result?.code != null) {
+  //         await controller?.pauseCamera();
+  //         Get.offAll(() =>  StartTrip(stationModel: widget.stationModel,));
+  //       }
+  //     }
+  //   }
+  // }
+  //
 
-    if (trips.isEmpty){
-      if (result?.code != null) {
-        await controller?.pauseCamera();
-        Get.offAll(() =>  StartTrip(stationModel: widget.stationModel,));
-      }
+
+
+  scanQr()async{
+
+
+    if (result?.code != null) {
+      await qrController?.pauseCamera();
+     // Get.offAll(() =>  StartTrip(stationModel: widget.stationModel,));
     }
-    for(TripInfo tripInfo in trips){
-      print('$tripInfo llllllllllllllllllllllllllllllllllllllllllllllllllllllllll');
-          if(tripInfo.flag! ==false){
-            if (result?.code != null) {
-              await controller?.pauseCamera();
-              Get.offAll(() =>  EndTrip(stationModel: widget.stationModel,));
-            }
-          }
-        }
-    for(TripInfo tripInfo in trips){
-      print('$tripInfo llllllllllllllllllllllllllllllllllllllllllllllllllllllllll');
-      if(tripInfo.flag! ==true){
-        if (result?.code != null) {
-          await controller?.pauseCamera();
-          Get.offAll(() =>  StartTrip(stationModel: widget.stationModel,));
-        }
-      }
-    }
+   if(userData['hasActiveRide']==false){
+   //startTrip
+     print('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb');
+     firestore.collection("users").doc(currentUser!.uid).update({
+       'hasActiveRide': true ,
+       'activeRideDetails':{
+         'startStation': 'widget.stationModel.stationName',
+         'startTime': getCurrentTime(),
+       }
+     });
+     print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+     Get.offAll(()=> StartTrip(stationModel: widget.stationModel,));
+
+   }else{
+     //endTrip
+     print('vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv');
+     firestore.collection("users").doc(currentUser!.uid).update({
+       'hasActiveRide': false ,
+       'activeRideDetails':{
+         'endStation': 'widget.stationModel.st',
+         'endTime': getCurrentTime(),
+       }
+     });
+     print('sssssssssssssssssssssssssssssssssssss');
+     //await userDataController.fetchData();
+     Get.offAll(()=> EndTrip());
+
+   }
   }
-
   Widget _buildQrView(BuildContext context) {
     // For this example we check how width or tall the device is and change the scanArea and overlay accordingly.
     var scanArea = (MediaQuery.of(context).size.width < 400 ||
@@ -173,7 +214,7 @@ class _QRViewExampleState extends State<QRViewExample> {
 
   void _onQRViewCreated(QRViewController controller) {
     setState(() {
-      this.controller = controller;
+      this.qrController = controller;
     });
     controller.scannedDataStream.listen((scanData) {
       setState(() {
@@ -194,7 +235,7 @@ class _QRViewExampleState extends State<QRViewExample> {
 
   @override
   void dispose() {
-    controller?.dispose();
+    qrController?.dispose();
     super.dispose();
   }
 

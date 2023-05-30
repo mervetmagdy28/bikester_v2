@@ -26,17 +26,19 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     tripController.getTrips();
     // TODO: implement initState
-   for(TripInfo tripInfo in trips){
-  if(tripInfo.flag! ==false){
-    for (StationModel stationModel in stations){
-      if (stationModel.stationName==tripInfo.endStationName){
-        Get.to( TripRunning(destinationLoc: stationModel,));
-      }
-    }
-  }else{
+//    for(TripInfo tripInfo in trips){
+//   if(tripInfo.flag! ==false){
+//     for (StationModel stationModel in stations){
+//       if (stationModel.stationName==tripInfo.endStationName){
+//         Get.to( TripRunning(destinationLoc: stationModel,));
+//       }
+//     }
+//   }else{
+//
+//   }
+// }
 
-  }
-}
+
     stationController.getStations();
 
     super.initState();
