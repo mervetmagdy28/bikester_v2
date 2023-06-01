@@ -144,6 +144,7 @@ class _QRViewExampleState extends State<QRViewExample> {
         //endTrip
        await firestore.collection("users").doc(currentUser!.uid).update({
           'hasActiveRide': false,
+         'freeTrip':false,
           'activeRideDetails': {
             'startStation':userData['activeRideDetails']['startStation'],
             'startTime': userData['activeRideDetails']['startTime'],

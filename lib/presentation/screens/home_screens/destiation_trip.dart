@@ -40,6 +40,8 @@ class _DestinationTripState extends State<DestinationTrip> {
 
     getPosition();
   }
+
+
   Future<void> getPosition() async {
 
     position = await _determinePosition();

@@ -1,5 +1,6 @@
 import 'package:bikesterr/data/models/station_model.dart';
 import 'package:bikesterr/presentation/screens/home_screens/destiation_trip.dart';
+import 'package:bikesterr/presentation/screens/home_screens/free_trip.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -40,7 +41,7 @@ class _StartTripState extends State<StartTrip> {
                 backgroundColor: MaterialStatePropertyAll(Colors.orange)
               ),
                 onPressed: (){
-
+                Get.off(()=> FreeTrip());
                 },
                 child: const Text("     Free Trip    ")),
             const Spacer(flex: 1,),

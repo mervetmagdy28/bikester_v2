@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:bikesterr/presentation/screens/home_screens/free_trip.dart';
 import 'package:bikesterr/presentation/screens/home_screens/scan_qr.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -91,6 +92,11 @@ class _NearestStationState extends State<NearestStation> {
 
     if (distance>50) {
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>ScanQr(stationModel: nearestStation!)));
+    }
+  }
+  freeTrip(){
+    if (userData['freeTrip'] == true){
+     Get.to(()=>const FreeTrip());
     }
   }
   void getNearestStation() async {

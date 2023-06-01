@@ -36,6 +36,7 @@ class UserDataController extends GetxController {
       box.write('bloodGroup', userData.value["bloodGroup"]);
       box.write('hasActiveRide', userData.value["hasActiveRide"]);
       box.write('activeRideDetails', userData.value["activeRideDetails"]);
+      box.write('freeTrip', userData.value["freeTrip"]);
     }
   }
 
