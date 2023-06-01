@@ -2,16 +2,12 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:bikesterr/data/models/station_model.dart';
 import 'package:bikesterr/presentation/screens/home_screens/start_trip.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:intl/intl.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-
 import '../../../constants.dart';
-import '../../../data/models/trip_info.dart';
 import 'end_trip.dart';
 
 
@@ -124,35 +120,6 @@ class _QRViewExampleState extends State<QRViewExample> {
       ),
     );
   }
-  // scannedQr()async {
-  //
-  //   if (trips.isEmpty){
-  //     if (result?.code != null) {
-  //       await controller?.pauseCamera();
-  //       Get.offAll(() =>  StartTrip(stationModel: widget.stationModel,));
-  //     }
-  //   }
-  //   for(TripInfo tripInfo in trips){
-  //     print('$tripInfo llllllllllllllllllllllllllllllllllllllllllllllllllllllllll');
-  //         if(tripInfo.flag! ==false){
-  //           if (result?.code != null) {
-  //             await controller?.pauseCamera();
-  //             Get.offAll(() =>  EndTrip(stationModel: widget.stationModel,));
-  //           }
-  //         }
-  //       }
-  //   for(TripInfo tripInfo in trips){
-  //     print('$tripInfo llllllllllllllllllllllllllllllllllllllllllllllllllllllllll');
-  //     if(tripInfo.flag! ==true){
-  //       if (result?.code != null) {
-  //         await controller?.pauseCamera();
-  //         Get.offAll(() =>  StartTrip(stationModel: widget.stationModel,));
-  //       }
-  //     }
-  //   }
-  // }
-  //
-
 
 
   scanQr()async{
@@ -160,37 +127,36 @@ class _QRViewExampleState extends State<QRViewExample> {
 
     if (result?.code != null) {
       await qrController?.pauseCamera();
-     // Get.offAll(() =>  StartTrip(stationModel: widget.stationModel,));
+      // Get.offAll(() =>  StartTrip(stationModel: widget.stationModel,));
+
+      print(currentUser!.uid);
+      if (userData['hasActiveRide'] == false) {
+        //startTrip
+        firestore.collection("users").doc(currentUser!.uid).update({
+          'hasActiveRide': true,
+          'activeRideDetails': {
+            'startStation': widget.stationModel.stationName,
+            'startTime': getCurrentTime(),
+          }
+        });
+        Get.off(() => StartTrip(stationModel: widget.stationModel,));
+      } else {
+        //endTrip
+       await firestore.collection("users").doc(currentUser!.uid).update({
+          'hasActiveRide': false,
+          'activeRideDetails': {
+            'startStation':userData['activeRideDetails']['startStation'],
+            'startTime': userData['activeRideDetails']['startTime'],
+            'endStation': widget.stationModel.stationName,
+            'endTime': getCurrentTime(),
+          }
+        });
+        Get.off(() =>  EndTrip(startStation: userData['activeRideDetails']['startStation'],endStation:  widget.stationModel.stationName.toString(),endTime: getCurrentTime().toString(),startTime: userData['activeRideDetails']['startTime'],));
+      }
     }
-   if(userData['hasActiveRide']==false){
-   //startTrip
-     print('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb');
-     firestore.collection("users").doc(currentUser!.uid).update({
-       'hasActiveRide': true ,
-       'activeRideDetails':{
-         'startStation': 'widget.stationModel.stationName',
-         'startTime': getCurrentTime(),
-       }
-     });
-     print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-     Get.offAll(()=> StartTrip(stationModel: widget.stationModel,));
-
-   }else{
-     //endTrip
-     print('vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv');
-     firestore.collection("users").doc(currentUser!.uid).update({
-       'hasActiveRide': false ,
-       'activeRideDetails':{
-         'endStation': 'widget.stationModel.st',
-         'endTime': getCurrentTime(),
-       }
-     });
-     print('sssssssssssssssssssssssssssssssssssss');
-     //await userDataController.fetchData();
-     Get.offAll(()=> EndTrip());
-
-   }
   }
+
+
   Widget _buildQrView(BuildContext context) {
     // For this example we check how width or tall the device is and change the scanArea and overlay accordingly.
     var scanArea = (MediaQuery.of(context).size.width < 400 ||

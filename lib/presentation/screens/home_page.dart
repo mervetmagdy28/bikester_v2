@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
   int index = 0;
   @override
   void initState() {
-    tripController.getTrips();
+   // tripController.getTrips();
     // TODO: implement initState
 //    for(TripInfo tripInfo in trips){
 //   if(tripInfo.flag! ==false){

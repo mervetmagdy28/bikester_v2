@@ -13,7 +13,7 @@ final FirebaseFirestore firestore = FirebaseFirestore.instance;
 CollectionReference rides = firestore.collection('rides');
 
 var stationController = Get.put(StationsController());
-var tripController = Get.put(TripController());
+//var tripController = Get.put(TripController());
 var userDataController = Get.put(UserDataController());
 
 var stations = stationController.allStations.value;
@@ -22,7 +22,7 @@ var currentUser=auth.currentUser;
 
 var userData = userDataController.userData.value;
 
-var trips = tripController.trips.value;
+//var trips = tripController.trips.value;
 
 String getCurrentTime(){
   String datetime = DateTime.now().toString();

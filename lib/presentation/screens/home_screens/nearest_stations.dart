@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../../constants.dart';
 import '../../../data/models/station_model.dart';
 import '../../../domain/controllers/polyline_response.dart';
 import '../../../domain/controllers/stations_controller.dart';
@@ -89,17 +90,16 @@ class _NearestStationState extends State<NearestStation> {
     );
 
     if (distance>50) {
-      Get.offAll( ScanQr(stationModel: nearestStation!,));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>ScanQr(stationModel: nearestStation!)));
     }
   }
   void getNearestStation() async {
-    var stationList = stationController.allStations.value;
     await getPosition();
 
-     nearestStation = stationList[0];
+     nearestStation = stations[0];
     double shortestDistance = double.infinity;
 
-    for (StationModel station in stationList) {
+    for (StationModel station in stations) {
       double distance = Geolocator.distanceBetween(
         position.latitude,
         position.longitude,

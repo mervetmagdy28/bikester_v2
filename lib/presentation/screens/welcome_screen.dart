@@ -1,4 +1,3 @@
-import 'package:bikesterr/presentation/components/appbar.dart';
 import 'package:bikesterr/presentation/screens/home_page.dart';
 import 'package:bikesterr/presentation/screens/login.dart';
 import 'package:bikesterr/presentation/screens/register.dart';
@@ -6,8 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-
-import '../../constants.dart';
 import '../components/custom_elevated_button.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -26,8 +23,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   func()async{
     if (FirebaseAuth.instance.currentUser != null) {
-      await userDataController.fetchData();
-      await Get.to(()=>HomePage());
+    await Get.to(()=>HomePage());
     }
   }
   @override

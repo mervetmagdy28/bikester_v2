@@ -108,9 +108,9 @@ class _DestinationTripState extends State<DestinationTrip> {
       }
     String url='https://www.google.com/maps/dir/?api=1&origin=${position.latitude.toString()},${position.longitude.toString()}&destination=${destinationLoc.lat.toString()},${destinationLoc.long.toString()}&travelmode=driving&dir_action=navigate';
     _launchURL(url);
-    rides.doc(id).update({
-      'end station Name':destinationLoc.stationName
-    });
+    // rides.doc(id).update({
+    //   'end station Name':destinationLoc.stationName
+    // });
   }
   @override
   Widget build(BuildContext context) {

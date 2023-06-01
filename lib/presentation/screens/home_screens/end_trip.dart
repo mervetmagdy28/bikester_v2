@@ -5,23 +5,25 @@ import '../../../constants.dart';
 import '../../../data/models/station_model.dart';
 
 class EndTrip extends StatefulWidget {
-  const EndTrip({Key? key,}) : super(key: key);
+  const EndTrip({Key? key, required this.startStation, required this.endStation, required this.startTime, required this.endTime,}) : super(key: key);
 //  final StationModel stationModel;
+
+  final String startStation;
+  final String endStation;
+  final String startTime;
+  final String endTime;
   @override
   State<EndTrip> createState() => _EndTripState();
 }
 
 class _EndTripState extends State<EndTrip> {
 
-  //late String id;
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    userDataController.fetchData();
     addRide();
-   // endTrip();
+
   }
   @override
   Widget build(BuildContext context) {
@@ -37,22 +39,22 @@ class _EndTripState extends State<EndTrip> {
          const  Center(child: Text("Trip Ended Successfully", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),)),
           Row(
             children: [
-              Text("start station ${userData['activeRideDetails']['startStation']}")
+              Text("start station ${widget.startStation}")
             ],
           ),
           Row(
             children: [
-              Text("End station ${userData['activeRideDetails']['endStation']}")
+              Text("End station ${widget.endStation}")
             ],
           ),
           Row(
             children: [
-              Text("start Time ${userData['activeRideDetails']['startTime']}")
+              Text("start Time ${widget.startTime}")
             ],
           ),
           Row(
             children: [
-              Text("end Time ${userData['activeRideDetails']['EndTime']}")
+              Text("end Time ${widget.endTime}")
             ],
           ),
         ],
@@ -60,40 +62,13 @@ class _EndTripState extends State<EndTrip> {
     );
   }
 
-  // String getCurrentTime(){
-  //   String datetime = DateTime.now().toString();
-  //   datetime= DateFormat("MMMM, dd, yyyy").format(DateTime.now());
-  //   String hourDate = DateFormat("hh:mm:ss a").format(DateTime.now());
-  //   return '$hourDate  $datetime';
-  // }
-  //
-  //
-  // getId()async{
-  //   for (StationModel stationModel in stations)
-  //   {
-  //     if (stationModel.stationName==widget.stationModel.stationName){
-  //     //  destinationLoc=stationModel;
-  //       var querySnapshot=await rides.get();
-  //       querySnapshot.docs.forEach((doc) {
-  //         id=doc.id;
-  //       });
-  //     }
-  //   }
-  //
-  // }
-  //
-  // endTrip()async {
-  //  // await getId();
-  //   rides.doc(id).update({
-  //     'flag':true,
-  //     'end trip':getCurrentTime()
-  //   });
-  // }
-
-
   addRide(){
-    var rideDetails= userData['activeRideDetails'] as Map<String , dynamic>;
-    rides.add(rideDetails);
+    rides.add({
+        'startStation':widget.startStation,
+        'startTime': widget.startTime,
+        'endStation': widget.endStation,
+        'endTime': widget.endTime,
+    });
   }
 
 
