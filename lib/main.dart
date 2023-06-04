@@ -18,6 +18,6 @@ void main() async {
   await Firebase.initializeApp();
   runApp(const GetMaterialApp(
     home: WelcomeScreen(),
-    debugShowCheckedModeBanner: false,
+    debugShowCheckedModeBanner: false ,
   ));
 }

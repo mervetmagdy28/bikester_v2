@@ -23,8 +23,8 @@ class _EndTripState extends State<EndTrip> {
     // TODO: implement initState
     super.initState();
     addRide();
-
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
